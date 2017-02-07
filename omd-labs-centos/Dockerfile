@@ -2,7 +2,8 @@ FROM centos:7
 MAINTAINER Simon Meggle<simon.meggle@consol.de>
 EXPOSE 80 443 22 4730 5666
 
-ENV REFRESHED 20161207
+ENV REFRESHED 20170207
+ENV OMDVERSION 2.20
 ARG SITENAME=demo
 
 
@@ -11,16 +12,9 @@ RUN rpm -Uvh "http://ftp.uni-stuttgart.de/epel/epel-release-latest-7.noarch.rpm"
     yum -y update && \
     yum -y install which lsof vim git openssh-server tree
 
-RUN rpm -Uvh "https://labs.consol.de/repo/testing/rhel7/x86_64/labs-consol-testing.rhel7.noarch.rpm" && \
+RUN rpm -Uvh "https://labs.consol.de/repo/stable/rhel7/i386/labs-consol-stable.rhel7.noarch.rpm" && \
     yum -y update && \
-    yum -y install omd-labs-edition-daily
-
-
-
-
-
-
-
+    yum -y install omd-${OMDVERSION}-labs-edition
 
 
 # -- OMD site creation

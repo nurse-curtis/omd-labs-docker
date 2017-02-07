@@ -2,7 +2,8 @@ FROM debian:8
 MAINTAINER Simon Meggle<simon.meggle@consol.de>
 EXPOSE 80 443 22 4730 5666
 
-ENV REFRESHED 20161207
+ENV REFRESHED 20170207
+ENV OMDVERSION 2.20
 ARG SITENAME=demo
 
 
@@ -17,9 +18,9 @@ RUN apt-get update && \
     apt-get install -y lsof vim git openssh-server tree tcpdump libevent-2.0-5
 
 RUN gpg --keyserver keys.gnupg.net --recv-keys F8C1CA08A57B9ED7 && gpg --armor --export F8C1CA08A57B9ED7 | apt-key add - && \
-    echo "deb http://labs.consol.de/repo/testing/debian $(cat /etc/os-release  | grep 'VERSION=' | tr '(' ')' | cut -d ')' -f2) main" > /etc/apt/sources.list.d/labs-consol-testing.list && \
+    echo "deb http://labs.consol.de/repo/stable/debian $(cat /etc/os-release  | grep 'VERSION=' | tr '(' ')' | cut -d ')' -f2) main" > /etc/apt/sources.list.d/labs-consol-stable.list && \
     apt-get update && \
-    apt-get install -y omd-labs-edition-daily && \
+    apt-get install -y omd-${OMDVERSION}-labs-edition && \
     apt-get clean
 
 RUN rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
