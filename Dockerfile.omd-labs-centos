@@ -4,6 +4,8 @@ EXPOSE 80 443 22 4730 5666
 
 ENV REFRESHED 20170308
 
+# SOURCE_BRANCH = OMD version, given by build hook, default to 2.20
+ARG SOURCE_BRANCH=2.20
 ### OMD installation ######################################
 RUN rpm -Uvh "http://ftp.uni-stuttgart.de/epel/epel-release-latest-7.noarch.rpm" && \
     yum clean all && \
@@ -12,7 +14,7 @@ RUN rpm -Uvh "http://ftp.uni-stuttgart.de/epel/epel-release-latest-7.noarch.rpm"
 
 RUN rpm -Uvh "https://labs.consol.de/repo/stable/rhel7/i386/labs-consol-stable.rhel7.noarch.rpm" && \
     yum -y update && \
-    yum -y install omd-${OMDVERSION}-labs-edition
+    yum -y install omd-${SOURCE_BRANCH}-labs-edition
 
 #### user environment ######################################
 ENV HOME=/root
