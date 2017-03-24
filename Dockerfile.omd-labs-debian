@@ -4,8 +4,8 @@ EXPOSE 80 443 22 4730 5666
 
 ENV REFRESHED 20170323
 
-# SOURCE_BRANCH = OMD version, given by build hook, default to 2.20
-ARG SOURCE_BRANCH=2.20
+# OMD_VERSION given by build hook, default to 2.20
+ARG OMD_VERSION=2.20
 ### OMD installation ######################################
 ENV DEBIAN_FRONTEND noninteractive
 
@@ -20,7 +20,7 @@ RUN apt-get update && \
 RUN gpg --keyserver keys.gnupg.net --recv-keys F8C1CA08A57B9ED7 && gpg --armor --export F8C1CA08A57B9ED7 | apt-key add - && \
     echo "deb http://labs.consol.de/repo/stable/debian $(cat /etc/os-release  | grep 'VERSION=' | tr '(' ')' | cut -d ')' -f2) main" > /etc/apt/sources.list.d/labs-consol-stable.list && \
     apt-get update && \
-    apt-get install -y omd-${SOURCE_BRANCH}-labs-edition && \
+    apt-get install -y omd-${OMD_VERSION}-labs-edition && \
     apt-get clean
 
 RUN rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
