@@ -4,6 +4,48 @@ EXPOSE 80 443 22 4730 5666
 
 ENV REFRESHED 20170323
 
+LABEL org.freenas.interactive="false"                                   \
+      org.freenas.version="1"                                           \
+      org.freenas.upgradeable="true"                                    \
+      org.freenas.expose-ports-at-host="true"                           \
+      org.freenas.autostart="true"                                      \
+      org.freenas.web-ui-protocol="http"                                \
+      org.freenas.web-ui-port=443                                       \
+      org.freenas.web-ui-path="/cmk"                                    \
+
+      org.freenas.port-mappings="80:80/tcp,443:443/tcp,22:22/tcp,4730:4730/tcp,5666:5666/tcp" \
+      org.freenas.volumes="[                                            \
+          {                                                             \
+              \"name\": \"/opt/omd/sites/cmk/etc\",                     \
+              \"descr\": \"CMK site /etc\"                              \
+          },                                                            \
+          {                                                             \
+              \"name\": \"/opt/omd/sites/cmk/var\",                     \
+              \"descr\": \"CMK site /var\"                              \
+          },                                                            \
+          {                                                             \
+              \"name\": \"/opt/omd/sites/cmk/local\",                   \
+              \"descr\": \"CMK site /local\"                            \
+          }                                                             \
+      ]"                                                                \
+       org.freenas.settings="[                                          \
+          {                                                             \
+              \"env\": \"PUID\",                                        \
+              \"descr\": \"UserID - Keep as 1000\",                     \
+              \"optional\": false                                       \
+          },                                                            \
+          {                                                             \
+              \"env\": \"PGID\",                                        \
+              \"descr\": \"GroupID - Keep as 1000\",                    \
+              \"optional\": false                                       \
+          },                                                            \
+          {                                                             \
+              \"env\": \"TZ\",                                          \
+              \"descr\": \"Timezone - eg Europe/London\",               \
+              \"optional\": true                                        \
+          }                                                             \
+      ]"
+
 ### OMD installation ######################################
 ENV DEBIAN_FRONTEND noninteractive
 
@@ -37,7 +79,7 @@ ENV ANSIBLE_VERBOSITY=
 
 ### -- OMD site creation (DEMO) ##############################
 ARG SITENAME=demo
-ENV SITENAME=$SITENAME
+ENV SITENAME=cmk
 RUN echo "export SITENAME=$SITENAME" > .sitename.env
 RUN sed -i 's|echo "on"$|echo "off"|' /opt/omd/versions/default/lib/omd/hooks/TMPFS
 RUN echo "create OMD site: $SITENAME" && omd create -u 1000 -g 1000 $SITENAME || true
